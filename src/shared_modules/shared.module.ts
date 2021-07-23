@@ -1,10 +1,21 @@
 import { Module, Global } from '@nestjs/common';
 import { ConfigService } from './services/config.service';
 import * as path from 'path';
+import { JwtModule } from '@nestjs/jwt';
 
 @Global()
 @Module({
-  imports: [],
+  imports: [
+    JwtModule.registerAsync({
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get('JWT_SECRET_KEY'),
+        signOptions: {
+          expiresIn: configService.getNumber('JWT_ACCESS_EXPIRATION_TIME'),
+        },
+      }),
+      inject: [ConfigService],
+    }),
+  ],
   providers: [
     {
       provide: ConfigService,
@@ -17,6 +28,6 @@ import * as path from 'path';
       ),
     },
   ],
-  exports: [ConfigService],
+  exports: [JwtModule, ConfigService],
 })
 export class SharedModule {}

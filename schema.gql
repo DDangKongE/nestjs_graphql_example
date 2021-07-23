@@ -60,12 +60,21 @@ type Query {
 
 type Mutation {
   login(userLoginInput: UserLoginInput!): TokenPayload!
+  createUser(createUserInput: CreateUserInput!): User!
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(updateBoardInput: UpdateBoardInput!): Board!
   removeBoard(id: Int!): Board!
 }
 
 input UserLoginInput {
+  """닉네임"""
+  usr_nickname: String!
+
+  """비밀번호"""
+  usr_password: String!
+}
+
+input CreateUserInput {
   """닉네임"""
   usr_nickname: String!
 

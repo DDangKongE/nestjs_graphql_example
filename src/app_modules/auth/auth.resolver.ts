@@ -1,8 +1,9 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { UserLoginInput } from './dto/user_login.input';
-import { TokenPayload } from '../user/entities/user.entity';
+import { TokenPayload, User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
+import { CreateUserInput } from './dto/create_user.input';
 
 @Resolver()
 export class AuthResolver {
@@ -13,17 +14,15 @@ export class AuthResolver {
 
   @Mutation(() => TokenPayload)
   async login(@Args('userLoginInput') userLoginInput: UserLoginInput) {
-    const user = await this.userService.findOne({
-      usr_nickname: userLoginInput.usr_nickname,
-      usr_password: userLoginInput.usr_password,
-    });
+    const result = await this.authService.validateUser(userLoginInput);
 
-    return {
-      user,
-      token: {
-        expires_in: 3600,
-        access_token: 'asdsadsafsaadasdfgsafa',
-      },
-    };
+    return result;
+  }
+
+  @Mutation(() => User)
+  async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+    await this.authService.checkUseNickname(createUserInput.usr_nickname);
+
+    return await this.authService.createUser(createUserInput);
   }
 }
