@@ -44,18 +44,3 @@ export class User {
   @CreateDateColumn({ name: 'register_date', type: 'datetime' })
   register_date: Date;
 }
-
-@ObjectType()
-export class LoginPayload {
-  @Field(() => User)
-  user: User;
-
-  @Field(() => Token)
-  token: Token;
-}
-
-@ObjectType()
-export class Token {
-  expiresIn: number;
-  accessToken: string;
-}
