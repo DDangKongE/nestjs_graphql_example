@@ -21,6 +21,16 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Token {
+  access_token: String!
+  expires_in: Float!
+}
+
+type TokenPayload {
+  user: User
+  token: Token
+}
+
 type Board {
   """Example field (placeholder)"""
   brd_id: Int
@@ -49,7 +59,7 @@ type Query {
 }
 
 type Mutation {
-  login(userLoginInput: UserLoginInput!): User!
+  login(userLoginInput: UserLoginInput!): TokenPayload!
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(updateBoardInput: UpdateBoardInput!): Board!
   removeBoard(id: Int!): Board!

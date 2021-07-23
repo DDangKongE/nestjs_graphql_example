@@ -44,3 +44,21 @@ export class User {
   @CreateDateColumn({ name: 'register_date', type: 'datetime' })
   register_date: Date;
 }
+
+@ObjectType()
+export class Token {
+  @Field(() => String, { nullable: false })
+  access_token: string;
+
+  @Field(() => Number, { nullable: false })
+  expires_in: number;
+}
+
+@ObjectType()
+export class TokenPayload {
+  @Field(() => User, { nullable: true })
+  user: User;
+
+  @Field(() => Token, { nullable: true })
+  token: Token;
+}
